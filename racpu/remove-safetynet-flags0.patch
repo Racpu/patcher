@@ -1,0 +1,74 @@
+From 4654aecd74a6802877d2606ad70a6126f15816c9 Mon Sep 17 00:00:00 2001
+From: Filipe Carreto <carreto.idn@gmail.com>
+Date: Sat, 18 Aug 2018 00:35:21 +0100
+Subject: [PATCH 1/1] Remove additional SafetyNet flags
+
+Signed-off-by: Filipe Carreto <carreto.idn@gmail.com>
+---
+ fs/proc/cmdline.c | 37 +++++++++++++++++++++++++++++++++++--
+ 1 file changed, 35 insertions(+), 2 deletions(-)
+
+diff --git a/fs/proc/cmdline.c b/fs/proc/cmdline.c
+index cbd82dff..e01f73a0 100644
+--- a/fs/proc/cmdline.c
++++ b/fs/proc/cmdline.c
+@@ -2,10 +2,13 @@
+ #include <linux/init.h>
+ #include <linux/proc_fs.h>
+ #include <linux/seq_file.h>
++#include <asm/setup.h>
++
++static char new_command_line[COMMAND_LINE_SIZE];
+ 
+ static int cmdline_proc_show(struct seq_file *m, void *v)
+ {
+-	seq_printf(m, "%s\n", saved_command_line);
++	seq_printf(m, "%s\n", new_command_line);
+ 	return 0;
+ }
+ 
+@@ -21,9 +24,39 @@ static const struct file_operations cmdline_proc_fops = {
+ 	.release	= single_release,
+ };
+ 
++static void remove_flag(char *cmd, const char *flag)
++{
++	char *start_addr, *end_addr;
++
++	/* Ensure all instances of a flag are removed */
++	while ((start_addr = strstr(cmd, flag))) {
++		end_addr = strchr(start_addr, ' ');
++		if (end_addr)
++			memmove(start_addr, end_addr + 1, strlen(end_addr));
++		else
++			*(start_addr - 1) = '\0';
++	}
++}
++
++static void remove_safetynet_flags(char *cmd)
++{
++	remove_flag(cmd, "androidboot.enable_dm_verity=");
++	remove_flag(cmd, "androidboot.secboot=");
++	remove_flag(cmd, "androidboot.verifiedbootstate=");
++	remove_flag(cmd, "androidboot.veritymode=");
++}
++
+ static int __init proc_cmdline_init(void)
+ {
++	strcpy(new_command_line, saved_command_line);
++
++	/*
++	 * Remove various flags from command line seen by userspace in order to
++	 * pass SafetyNet CTS check.
++	 */
++	remove_safetynet_flags(new_command_line);
++
+ 	proc_create("cmdline", 0, NULL, &cmdline_proc_fops);
+ 	return 0;
+ }
+-fs_initcall(proc_cmdline_init);
++fs_initcall(proc_cmdline_init);
+\ No newline at end of file
+-- 
+2.18.0.windows.1
+

@@ -1,0 +1,26 @@
+From 1fa470d4d32584a7240d460c6562121e5f85137c Mon Sep 17 00:00:00 2001
+From: Filipe Carreto <carreto.idn@gmail.com>
+Date: Fri, 17 Aug 2018 23:58:30 +0100
+Subject: [PATCH 1/1] Use 'release-keys' for build tag
+
+Signed-off-by: Filipe Carreto <carreto.idn@gmail.com>
+---
+ core/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/core/Makefile b/core/Makefile
+index 3fb424733..ef004fc8d 100644
+--- a/core/Makefile
++++ b/core/Makefile
+@@ -119,7 +119,7 @@ endif
+ # Both of these tags will be removed and replaced with "release-keys"
+ # when the target-files is signed in a post-build step.
+ ifeq ($(DEFAULT_SYSTEM_DEV_CERTIFICATE),build/target/product/security/testkey)
+-BUILD_KEYS := test-keys
++BUILD_KEYS := release-keys
+ else
+ BUILD_KEYS := dev-keys
+ endif
+-- 
+2.18.0.windows.1
+
