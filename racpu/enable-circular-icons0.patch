@@ -1,0 +1,26 @@
+From 7d13761b59e59c2d3ca6b3c1e49ed41493b82fa6 Mon Sep 17 00:00:00 2001
+From: Filipe Carreto <carreto.idn@gmail.com>
+Date: Sat, 18 Aug 2018 03:43:39 +0100
+Subject: [PATCH 1/1] Enable circular icons
+
+Signed-off-by: Filipe Carreto <carreto.idn@gmail.com>
+---
+ core/res/res/values/config.xml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/core/res/res/values/config.xml b/core/res/res/values/config.xml
+index c29ff3c90a9..913a04068a9 100755
+--- a/core/res/res/values/config.xml
++++ b/core/res/res/values/config.xml
+@@ -2838,7 +2838,7 @@
+     <string name="config_carrierDemoModePackages" translatable="false"></string>
+ 
+     <!-- Flag indicating whether round icons should be parsed from the application manifest. -->
+-    <bool name="config_useRoundIcon">false</bool>
++    <bool name="config_useRoundIcon">true</bool>
+ 
+     <!-- Flag indicating whether the assist disclosure can be disabled using
+          ASSIST_DISCLOSURE_ENABLED. -->
+-- 
+2.18.0.windows.1
+
